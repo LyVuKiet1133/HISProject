@@ -6,7 +6,7 @@ from screens.BaseScreen import BaseScreen
 class LoginPage(BaseScreen):
     username_txf = (MobileBy.ACCESSIBILITY_ID, "txtAccName")
     password_txf = (MobileBy.ACCESSIBILITY_ID, "txtPassword")
-    login_btn = (MobileBy.ACCESSIBILITY_ID, "")
+    login_btn = (MobileBy.ACCESSIBILITY_ID, "loignbtn")
 
     def __init__(self, driver):
         super().__init__(driver)
