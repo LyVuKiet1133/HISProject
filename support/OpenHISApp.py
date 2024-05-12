@@ -1,9 +1,10 @@
 from support import Windriver
 from appium import webdriver
+from data.TestData import TestData
 
 
 def openApp():
-    app_path = r"C:\Users\VANTHANG\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\InfomedHISLK\InfomedHISLK.appref-ms"
+    app_path = TestData.APP_PATH
     desired_caps = {
         "app": app_path,
         "platformName": "Windows",
