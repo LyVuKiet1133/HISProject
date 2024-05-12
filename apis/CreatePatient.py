@@ -3,9 +3,11 @@ import pytest
 from apis.config import token, auth_header
 from data.Urls import URLS
 from data.Patients import Patient
+from supports import support
 
 
-def test_create_patient(token, auth_header):
+@pytest.fixture(scope='session')
+def create_patient(auth_header):
     patient = Patient.random_patient()
     body = {
         "PatientCode": "SimulatedCode",
@@ -32,11 +34,30 @@ def test_create_patient(token, auth_header):
         "RelativePhone": "",
         "RelativeType": 0,
         "Status": 1,
-        "FullName": "LVK 1205",
+        "FullName": patient.first_name + " " + patient.last_name,
         "FullAddress": "Suối Tre"
     }
     response = requests.post(URLS.API_CREATE_PATIENT, json=body, headers=auth_header)
+    print(response.json())
     assert response.status_code == 201
     json_data = response.json()
-    print(json_data)
-    assert json_data['patientCode'] is not None
+    patientId = json_data['patientId']
+    nationality = json_data['nationality']
+    city = json_data['city']
+    district = json_data['district']
+    ward = json_data['ward']
+    address = json_data['address']
+    srcFullName = json_data['srcFullName']
+    ethnic = json_data['ethnic']
+    occupation = json_data['occupation']
+    dob = json_data['dob']
+    assert patientId is not None
+    ins_patient = Patient(patientId=patientId, nationality=nationality, city=city, district=district,
+                          ward=ward, address=address, srcFullName=srcFullName, ethnic=ethnic, occupation=occupation,
+                          dob=support.convert_datetime_string(dob))
+    return ins_patient
+
+
+def test_create_patient(create_patient):
+    patient = create_patient
+    assert patient.patientId is not None

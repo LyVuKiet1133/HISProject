@@ -1,4 +1,4 @@
-from support import Windriver
+from supports import Windriver
 from appium import webdriver
 from data.TestData import TestData
 

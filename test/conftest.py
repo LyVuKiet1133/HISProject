@@ -1,5 +1,5 @@
 
-from support import OpenHISApp
+from supports import OpenHISApp
 import pytest
 
 
