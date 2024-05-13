@@ -1,15 +1,17 @@
 import time
 from datetime import datetime
 
-import requests
 import pytest
-from apis.config import token, auth_header
+import requests
 from data.Urls import URLS
-from apis.CreatePatient import create_patient
+from apis.tiepnhan.CreatePatient import create_patient
+from apis.config import token, auth_header
+from data.Patients import Patient
 from supports import support
 
 
-def test_create_patient_insurance(token, auth_header, create_patient):
+@pytest.fixture(scope="session")
+def create_patient_insurance(token, auth_header, create_patient):
     patient = create_patient
     body = {
         "PatientId": patient.patientId,
@@ -31,7 +33,13 @@ def test_create_patient_insurance(token, auth_header, create_patient):
         "IsTemp": False,
         "FullInsOn": None
     }
-    response = requests.post(f'{URLS.API_CREATE_PATIENT_INSURANCE}{patient.dob}', json=body, headers=auth_header)
-    print(f'{URLS.API_CREATE_PATIENT_INSURANCE}{patient.dob}')
-    print(response.json())
+    response = requests.post(f'{URLS.API_CREATE_PATIENT_INSURANCE}{support.convert_server_time_string(patient.dob)}',
+                             json=body, headers=auth_header)
+    print(f'{URLS.API_CREATE_PATIENT_INSURANCE}{support.convert_server_time_string(patient.dob)}')
+    json_data = response.json()
+    print(json_data)
     assert response.status_code == 201
+    patientId = json_data['patientId']
+    insCardNo = json_data['insCardNo']
+    ins_patient = Patient(patientId=patientId, insCardNo=insCardNo)
+    return ins_patient

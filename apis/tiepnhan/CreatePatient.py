@@ -52,10 +52,10 @@ def create_patient(auth_header):
     occupation = json_data['occupation']
     dob = json_data['dob']
     assert patientId is not None
-    ins_patient = Patient(patientId=patientId, nationality=nationality, city=city, district=district,
+    patient = Patient(patientId=patientId, nationality=nationality, city=city, district=district,
                           ward=ward, address=address, srcFullName=srcFullName, ethnic=ethnic, occupation=occupation,
-                          dob=support.convert_datetime_string(dob))
-    return ins_patient
+                          dob=dob)
+    return patient
 
 
 def test_create_patient(create_patient):

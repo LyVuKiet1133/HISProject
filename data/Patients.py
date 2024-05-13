@@ -9,6 +9,13 @@ class Patient():
         self.address = None
         self.sdt = None
         self.dob = None
+        self.srcFullName = None
+        self.district = None
+        self.ward = None
+        self.ethnic = None
+        self.nationality = None
+        self.occupation = None
+        self.insCardNo = None
         for key, value in kwargs.items():
             setattr(self, key, value)
 
