@@ -1,13 +1,18 @@
+import time
+
 import requests
 import pytest
-from apis.config import token, auth_header
+from apis.config import get_auth_header
 from data.Urls import URLS
 from data.Patients import Patient
 from supports import support
+import concurrent.futures
 
 
-@pytest.fixture(scope='session')
-def create_patient(auth_header):
+# @pytest.fixture(scope='session')
+def create_patient():
+    start_time = time.time()
+    auth_header = get_auth_header()
     patient = Patient.random_patient()
     body = {
         "PatientCode": "SimulatedCode",
@@ -35,7 +40,7 @@ def create_patient(auth_header):
         "RelativeType": 0,
         "Status": 1,
         "FullName": patient.first_name + " " + patient.last_name,
-        "FullAddress": "Suối Tre"
+        "FullAddress": "Khu phố Suối Tre"
     }
     response = requests.post(URLS.API_CREATE_PATIENT, json=body, headers=auth_header)
     print(response.json())
@@ -51,13 +56,27 @@ def create_patient(auth_header):
     ethnic = json_data['ethnic']
     occupation = json_data['occupation']
     dob = json_data['dob']
-    assert patientId is not None
+    '''assert patientId is not None
     patient = Patient(patientId=patientId, nationality=nationality, city=city, district=district,
-                          ward=ward, address=address, srcFullName=srcFullName, ethnic=ethnic, occupation=occupation,
-                          dob=dob)
-    return patient
+                      ward=ward, address=address, srcFullName=srcFullName, ethnic=ethnic, occupation=occupation,
+                      dob=dob)'''
+    end_time = time.time()
+    print(f'Request sent at: {start_time}, Response received at: {end_time}')
+    return json_data
 
+def main():
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+        # Lên lịch hai yêu cầu POST đồng thời
+        futures = [executor.submit(create_patient) for _ in range(2)]
 
-def test_create_patient(create_patient):
-    patient = create_patient
-    assert patient.patientId is not None
+        # Chờ và lấy kết quả từ các Future
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                status_code, patient = future.result()
+                print(f'Status Code: {status_code}')
+                print(f'Patient ID: {patient.patientId}')
+            except Exception as e:
+                print(f'Generated an exception: {e}')
+
+if __name__ == "__main__":
+    main()

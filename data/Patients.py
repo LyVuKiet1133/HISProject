@@ -24,7 +24,7 @@ class Patient():
         current_time = datetime.now()
         first_name = current_time.strftime("%d%m%Y%H%M%S")
         last_name = "LVK"
-        address = "Suối Tre"
+        address = "Khu Phố Suối Tre"
         return cls(first_name=first_name, last_name=last_name, address=address)
 
 

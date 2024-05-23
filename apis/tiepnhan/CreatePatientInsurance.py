@@ -5,16 +5,18 @@ import pytest
 import requests
 from data.Urls import URLS
 from apis.tiepnhan.CreatePatient import create_patient
-from apis.config import token, auth_header
+from apis.config import get_auth_header
 from data.Patients import Patient
 from supports import support
 
 
-@pytest.fixture(scope="session")
-def create_patient_insurance(token, auth_header, create_patient):
-    patient = create_patient
+#@pytest.fixture(scope="session")
+def create_patient_insurance():
+    auth_header = get_auth_header()
+    json_response_patient = create_patient()
+    patientId = json_response_patient['patientId']
     body = {
-        "PatientId": patient.patientId,
+        "PatientId": patientId,
         "InsCardNo": "GD401" + support.get_random_last_10digits(),
         "InsName": "BHXH",
         "StartDate": "2024-01-01T00:00:00+07:00",
@@ -33,13 +35,15 @@ def create_patient_insurance(token, auth_header, create_patient):
         "IsTemp": False,
         "FullInsOn": None
     }
-    response = requests.post(f'{URLS.API_CREATE_PATIENT_INSURANCE}{support.convert_server_time_string(patient.dob)}',
+    response = requests.post(f'{URLS.API_CREATE_PATIENT_INSURANCE}{support.convert_server_time_string(json_response_patient['dob'])}',
                              json=body, headers=auth_header)
-    print(f'{URLS.API_CREATE_PATIENT_INSURANCE}{support.convert_server_time_string(patient.dob)}')
-    json_data = response.json()
-    print(json_data)
+    print(f'{URLS.API_CREATE_PATIENT_INSURANCE}{support.convert_server_time_string(json_response_patient['dob'])}')
+    json_response_insurance = response.json()
+    print(json_response_insurance)
     assert response.status_code == 201
-    patientId = json_data['patientId']
-    insCardNo = json_data['insCardNo']
+    patientId = json_response_insurance['patientId']
+    insCardNo = json_response_insurance['insCardNo']
     ins_patient = Patient(patientId=patientId, insCardNo=insCardNo)
-    return ins_patient
+    return json_response_patient, json_response_insurance
+def test_create_patient_insurance():
+    patient_insurance = create_patient_insurance()
