@@ -5,7 +5,6 @@ import requests
 import json
 
 
-# @pytest.fixture(scope='session')
 def get_drug():
     auth_header = get_auth_header()
     url = URLS.API_GET_DRUG
@@ -16,7 +15,7 @@ def get_drug():
         "InvSources": None,
         "LotIds": None,
         "ItemIds": [
-            11272
+            11280
         ],
         "IgnoreItemIds": None,
         "VouStatus": None,

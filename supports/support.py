@@ -16,7 +16,7 @@ def convert_datetime_string(input_datetime_str):
 def convert_datetime_string_medical(input_datetime_str):
     dt_object = datetime.fromisoformat(input_datetime_str)
     formatted_date_str = dt_object.strftime("%Y-%m-%dT%H:%M:%S")
-    print(formatted_date_str)
+#   print(formatted_date_str)
     return formatted_date_str
 
 
@@ -24,7 +24,7 @@ def convert_datetime_string_medical(input_datetime_str):
 def convert_server_time_string(input_datetime_str):
     dt_object = datetime.fromisoformat(input_datetime_str.replace('Z', '+00:00'))
     formatted_time = dt_object.strftime("%Y%m%d%H%M%S")
-    print(formatted_time)
+#   print(formatted_time)
     return formatted_time
 
 
@@ -32,7 +32,7 @@ def convert_server_time_string(input_datetime_str):
 def convert_server_time_ddmmyyyhhmm(input_datetime_str):
     dt_object = datetime.fromisoformat(input_datetime_str.replace('Z', '+00:00'))
     formatted_time = dt_object.strftime("%d/%m/%Y %H:%M")
-    print(formatted_time)
+#   print(formatted_time)
     return formatted_time
 
 

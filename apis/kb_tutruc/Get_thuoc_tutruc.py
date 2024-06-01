@@ -1,0 +1,237 @@
+import pytest
+from apis.config import get_auth_header
+from data.Urls import URLS
+import requests
+
+
+def get_drug_tt():
+    auth_header = get_auth_header()
+    url = URLS.API_GET_DRUG_TUTRUC
+    body = [
+        13413
+    ]
+    response = requests.post(url, json=body, headers=auth_header)
+    assert response.status_code == 200
+    data = response.json()
+    print(f'JSON: {data}')
+    return response
+
+
+'''[
+     {
+        "productItem": {
+            "itemId": 13413,
+            "insIndex": "1417.27",
+            "code": "LidT32",
+            "type": 1,
+            "itemCat": 9,
+            "atc": "",
+            "name": "Lidonalin",
+            "description": "Hộp 2 vỉ x 5 ống x 1,8ml",
+            "ntlCode": "40.13",
+            "ntlName": "Lidonalin",
+            "unit": "Ống",
+            "pkgUnit": "Ống",
+            "pkgUnitText": "Ống 1 Ống",
+            "usageUnit": "Ống",
+            "ppp": 1,
+            "ppu": 1,
+            "maxQtyForEntry": null,
+            "maxQtyForReceipt": null,
+            "medAI": "Lidocain+Adrenalin",
+            "medUseRoute": 210,
+            "medTherapyRoot": null,
+            "medDosageForm": 866,
+            "medStrenght": "36mg+18mcg/1,8ml",
+            "medGbCode": null,
+            "regNo": "VD-21404-14",
+            "mfrCode": 995,
+            "mfrName": "Vĩnh Phúc",
+            "mfrAddr": "",
+            "mfrCountry": "VN",
+            "insCode": "40.13",
+            "insName": "Lidonalin",
+            "insPayRatio1": 100,
+            "insPayRatio2": null,
+            "price": null,
+            "attribute": 2,
+            "drugWarnings": "",
+            "stockCritLevel": 1,
+            "status": 1,
+            "insPriceCei1": null,
+            "insPriceCei2": null,
+            "calories": null,
+            "bidGroupCode": 5,
+            "bidPackageCode": 1,
+            "bidDocNo": "1417/QĐ-SYT",
+            "sysFullName": "Lidonalin",
+            "processingMethodCode": "",
+            "note": "",
+            "purchaseType": null
+        },
+        "itemLot": null,
+        "itemPrice": {
+            "itemId": 13413,
+            "lotId": 15975,
+            "itemSource": 1,
+            "insPrice": 4830.000,
+            "price": 4830.000,
+            "priceLoss": null
+        },
+        "inventory": {
+            "storeId": 155,
+            "invSource": 1,
+            "itemId": 13413,
+            "lotId": null,
+            "vouInId": null,
+            "qty": 1.000,
+            "amt": null,
+            "status": 1
+        },
+        "itemSource": null
+    },
+    {
+        "productItem": {
+            "itemId": 11830,
+            "insIndex": "1577.19",
+            "code": "HUTT15",
+            "type": 1,
+            "itemCat": 49,
+            "atc": "",
+            "name": "Huyết thanh kháng độc tố uốn ván tinh chế (SAT)",
+            "description": "",
+            "ntlCode": "40.825",
+            "ntlName": "Huyết thanh kháng độc tố uốn ván tinh chế (SAT)",
+            "unit": "Ống",
+            "pkgUnit": "Ống",
+            "pkgUnitText": "Hộp 20 ống, hai vỉ × 1500 đvqt  ",
+            "usageUnit": "Ống",
+            "ppp": 1,
+            "ppu": 1,
+            "maxQtyForEntry": null,
+            "maxQtyForReceipt": null,
+            "medAI": "Huyết thanh kháng độc tố uốn ván tinh chế",
+            "medUseRoute": 210,
+            "medTherapyRoot": null,
+            "medDosageForm": 866,
+            "medStrenght": "Huyết thanh kháng độc tố uốn ván tinh chế, (1500 IU/ống)",
+            "medGbCode": null,
+            "regNo": "QLSP-1037-17",
+            "mfrCode": 942,
+            "mfrName": "IVAC",
+            "mfrAddr": null,
+            "mfrCountry": "VN",
+            "insCode": "40.825",
+            "insName": "Huyết thanh kháng độc tố uốn ván tinh chế (SAT)",
+            "insPayRatio1": 100,
+            "insPayRatio2": null,
+            "price": null,
+            "attribute": 32770,
+            "drugWarnings": "",
+            "stockCritLevel": 1,
+            "status": 2,
+            "insPriceCei1": null,
+            "insPriceCei2": null,
+            "calories": null,
+            "bidGroupCode": 4,
+            "bidPackageCode": 1,
+            "bidDocNo": "1577/QĐ-SYT",
+            "sysFullName": "Huyết thanh kháng độc tố uốn ván tinh chế (SAT)",
+            "processingMethodCode": "",
+            "note": "",
+            "purchaseType": null
+        },
+        "itemLot": null,
+        "itemPrice": {
+            "itemId": 11830,
+            "lotId": 18292,
+            "itemSource": 1,
+            "insPrice": 25263.000,
+            "price": 25263.000,
+            "priceLoss": null
+        },
+        "inventory": {
+            "storeId": 155,
+            "invSource": 1,
+            "itemId": 11830,
+            "lotId": null,
+            "vouInId": null,
+            "qty": 2.000,
+            "amt": null,
+            "status": 1
+        },
+        "itemSource": null
+    },
+    {
+        "productItem": {
+            "itemId": 11830,
+            "insIndex": "1577.19",
+            "code": "HUTT15",
+            "type": 1,
+            "itemCat": 49,
+            "atc": "",
+            "name": "Huyết thanh kháng độc tố uốn ván tinh chế (SAT)",
+            "description": "",
+            "ntlCode": "40.825",
+            "ntlName": "Huyết thanh kháng độc tố uốn ván tinh chế (SAT)",
+            "unit": "Ống",
+            "pkgUnit": "Ống",
+            "pkgUnitText": "Hộp 20 ống, hai vỉ × 1500 đvqt  ",
+            "usageUnit": "Ống",
+            "ppp": 1,
+            "ppu": 1,
+            "maxQtyForEntry": null,
+            "maxQtyForReceipt": null,
+            "medAI": "Huyết thanh kháng độc tố uốn ván tinh chế",
+            "medUseRoute": 210,
+            "medTherapyRoot": null,
+            "medDosageForm": 866,
+            "medStrenght": "Huyết thanh kháng độc tố uốn ván tinh chế, (1500 IU/ống)",
+            "medGbCode": null,
+            "regNo": "QLSP-1037-17",
+            "mfrCode": 942,
+            "mfrName": "IVAC",
+            "mfrAddr": null,
+            "mfrCountry": "VN",
+            "insCode": "40.825",
+            "insName": "Huyết thanh kháng độc tố uốn ván tinh chế (SAT)",
+            "insPayRatio1": 100,
+            "insPayRatio2": null,
+            "price": null,
+            "attribute": 32770,
+            "drugWarnings": "",
+            "stockCritLevel": 1,
+            "status": 2,
+            "insPriceCei1": null,
+            "insPriceCei2": null,
+            "calories": null,
+            "bidGroupCode": 4,
+            "bidPackageCode": 1,
+            "bidDocNo": "1577/QĐ-SYT",
+            "sysFullName": "Huyết thanh kháng độc tố uốn ván tinh chế (SAT)",
+            "processingMethodCode": "",
+            "note": "",
+            "purchaseType": null
+        },
+        "itemLot": null,
+        "itemPrice": {
+            "itemId": 11830,
+            "lotId": 18292,
+            "itemSource": 1,
+            "insPrice": 25263.000,
+            "price": 25263.000,
+            "priceLoss": null
+        },
+        "inventory": {
+            "storeId": 155,
+            "invSource": 1,
+            "itemId": 11830,
+            "lotId": null,
+            "vouInId": null,
+            "qty": 1.000,
+            "amt": null,
+            "status": 1
+        },
+        "itemSource": null
+    }
+]'''

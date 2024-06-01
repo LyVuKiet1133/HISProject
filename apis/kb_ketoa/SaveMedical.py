@@ -1,32 +1,25 @@
 import json
 import time
 
+import pytest
 import requests
 
-from apis.KB.Prescriptions import post_Prescriptions_TxVisitIds
-from apis.KB.TxVisitMeds import post_TxVisitMeds_TxVisitIds
-from apis.KB.TxVisitMeds_Entries import post_TxVisitMeds_Entries
-from apis.KB.get_TxVisits import get_TxVisits_EntryID
 from apis.config import get_auth_header
-from apis.KB.GetDrugs import get_drug
+from apis.kb_ketoa.Get_Drugs_To_Prescribe import get_drug
 from apis.CurrentServerDateTime import get_server_datetime
 from apis.tiepnhan.Create_Visit import create_visit
 from apis.tiepnhan.CreatePatient import create_patient
 from apis.tiepnhan.CreatePatientInsurance import create_patient_insurance
+from apis.duoc.ApproveVoucherIn import Approve_Voucher_In
 from data.Urls import URLS
 from supports import support
 import concurrent.futures
 
-'''@pytest.fixture
-async def session():
-    async with aiohttp.ClientSession() as session:
-        yield session'''
 
-
-def test_save_medical_examination():
-    auth_header = get_auth_header()
+def save_medical_examination(json_data_visit, auth_header):
+    #   auth_header = get_auth_header()
     server_datetime = get_server_datetime()
-    json_data_visit = create_visit()
+    #   json_data_visit = create_visit()
     replaced_string_entryId = "27811"
     replace_string_entryId = str(json_data_visit['entry']['entryId'])
     url = URLS.API_SAVE_MEDICAL.replace(replaced_string_entryId, replace_string_entryId)
@@ -252,14 +245,6 @@ def prepare_data_save_drug():
         return url, body, auth_header
 
 
-def prepare_data1():
-    return prepare_data_save_drug()
-
-
-def prepare_data2():
-    return prepare_data_save_drug()
-
-
 def prepare_data_thread(count):
     result = []
     for i in range(count):
@@ -276,7 +261,13 @@ def save_drug(url, body, auth_header):
     return response
 
 
-def test_save_drugs_thread(count=2):
+@pytest.mark.parametrize("count", [
+    2,
+    3,
+    4
+])
+def test_save_drugs_thread(count):
+    Approve_Voucher_In()
     results_data = prepare_data_thread(count)
     urls_bodies_auth_headers = [(url, body, auth_header) for url, body, auth_header in results_data]
     with concurrent.futures.ThreadPoolExecutor(max_workers=count) as executor:
@@ -284,14 +275,20 @@ def test_save_drugs_thread(count=2):
             executor.submit(save_drug, url, body, auth_header)
             for url, body, auth_header in urls_bodies_auth_headers
         ]
-    for future in concurrent.futures.as_completed(futures):
+    future_results = []
+    for i, future in enumerate(concurrent.futures.as_completed(futures)):
         try:
             response = future.result()
             status_code = response.status_code
-            print(f'STATUS_CODE: {status_code}')
-            assert status_code == 204
+            print(f'FUTURE {i} STATUS_CODE: {status_code}')
+            future_results.append(status_code)
         except Exception as e:
             print(f'Error: {e}')
+            future_results.append(None)
+    if future_results:
+        print(f'DANH SÁCH TRẠNG THÁI {future_results}')
+        count_204 = sum(1 for result in future_results if result == 204)
+        assert count_204 == 1, f'Expected exactly one result with status code 204, but found {count_204}'
 
 
 def test_save_drug_normal():

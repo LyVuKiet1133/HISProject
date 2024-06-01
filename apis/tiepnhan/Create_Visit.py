@@ -94,14 +94,3 @@ def create_visit():
                   ticketId=ticketId, createByWardUnitId=createByWardUnitId)'''
     return json_data_visit
 
-
-'''def main():
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = [executor.submit() for _ in range(2)]
-        for future in concurrent.futures.as_completed(futures):
-            response = future.result()'''
-
-
-'''if __name__ == "__main__":
-    main()
-'''
